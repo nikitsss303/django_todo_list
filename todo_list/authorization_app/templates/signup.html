@@ -4,10 +4,22 @@ Signup
 {% endblock title %}
 
 {% block main %}
-<label for="name">Name:</label>
-<input type="text" id="name" name="name"><br><br>
-<label for="password">Password:</label>
-<input type="text" id="password" name="password"><br><br>
-<a href="{% url 'authorization_app:login' %}">Login</a><br><br>
-<input type="submit" value="Registrate">
+<form method='post'>
+    {% csrf_token %}
+    {% if error %}
+        <p style='color: red'>{{error}}</p>
+    {% endif %}
+    <label for="user_name">Your name:</label>
+    <input type="text" id="user_name" name="user_name" required><br><br>
+
+    <label for="user_password1">Your password:</label>
+    <input type="password" id="user_password1" name="user_password1" required><br><br>
+
+    <label for='user_password2'>Confirm the password:</label>
+    <input type="password" id='user_password2' name="user_password2" required><br><br>
+
+    <a href="{% url 'authorization_app:login' %}">Login</a><br><br>
+
+    <button type='submit'>Registrate</button>
+</form>
 {% endblock main %}
