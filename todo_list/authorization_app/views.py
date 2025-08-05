@@ -23,7 +23,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login.html')
+    return redirect('authorization_app:login')
 
 
 def signup_view(request):
@@ -41,7 +41,7 @@ def signup_view(request):
         user = User.objects.create_user(username=user_name, email='', password=user_password1)
         user.save()
 
-        return redirect('login.html')
+        return redirect('authorization_app:login')
     return render(request, 'signup.html')
 
 
