@@ -2,3 +2,21 @@
 {% block title %}
 List
 {% endblock title %}
+
+{% block header %}
+<a href="{% url 'list_app:create' %}">Create task</a><br>
+<h1>{{user_name}}'s tasks</h1>
+{% endblock header %}
+
+{% block main %}
+{% for todo in todos %}
+<p><b>{{todo.title}}</b></p>
+<ul>
+    <li>{{todo.description}}</li>
+    <li>{{todo.is_completed}}</li>
+    <li>{{todo.created_at}}</li>
+</ul>
+{% empty %}
+<h1>You don't have any tasks!<h1>
+{% endfor %}
+{% endblock main %}

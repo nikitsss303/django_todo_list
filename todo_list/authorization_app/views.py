@@ -10,11 +10,9 @@ def login_view(request):
 
         user = authenticate(request, username=user_name, password=user_password)
 
-        print(user)
-
         if user is not None:
             login(request, user)
-            return redirect('authorization_app:test')
+            return redirect('list_app:list')
         else:
             return render(request, 'login.html', {'error':'Incorrect name or password!'})
          
