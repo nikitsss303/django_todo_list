@@ -4,8 +4,18 @@ from authorization_app.models import Todo
 
 # Create your views here.
 def list_view(request):
-    filtered_tasks = Todo.objects.filter(user_id=request.user.id)
+    if request.method == 'POST':
+        action = request.POST.get('action')
 
+        if action == 'delete-action':
+            todo_id = request.POST.get('todo_id')
+            todo = Todo.objects.filter(id=todo_id, user_id=request.user)
+
+            if todo:
+                todo.delete()
+            return redirect('list_app:list')
+
+    filtered_tasks = Todo.objects.filter(user_id=request.user.id)
     return render(request, 'list.html', {
         'user_name':request.user,
         'todos':filtered_tasks
