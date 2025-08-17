@@ -1,0 +1,30 @@
+{% extends "base_list.html" %}
+{% block title %}
+Change
+{% endblock title %}
+
+{% block header %}
+<h1>{{user_name}}, change a task</h1>
+{% endblock header %}
+
+{% block main %}
+<form method='post'>
+    {% csrf_token %}
+    {% if error %}
+        <p style='color: red'>{{error}}</p>
+    {% endif %}
+    <input type='hidden' name='todo_id' value='{{todo_id}}'>
+
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value='{{title}}' required><br><br>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" value='{{description}}'><br><br>
+
+    <label for="is_completed">Is completed:</label>
+    <input type="checkbox" id="is_completed" name="is_completed" {{is_completed}}><br><br>
+
+    <button type='submit' name='action' value='change'>Change</button>
+    <button type='button' onclick="window.location.href='{% url 'list_app:list' %}'">Close</button>
+</form>
+{% endblock main %}

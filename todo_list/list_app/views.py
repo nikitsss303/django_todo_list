@@ -14,6 +14,15 @@ def list_view(request):
             if todo:
                 todo.delete()
             return redirect('list_app:list')
+        
+        elif action == 'change-action':
+            todo_id = request.POST.get('todo_id')\
+            
+            request.session['temp_data'] = {
+                'todo_id':todo_id,
+            }
+
+            return redirect('list_app:change')
 
     filtered_tasks = Todo.objects.filter(user_id=request.user.id)
     return render(request, 'list.html', {
@@ -28,12 +37,11 @@ def create_view(request):
 
         title = request.POST.get('title')
         description = request.POST.get('description')
-        user_id = request.user
 
         todo = Todo.objects.create(
             title=title, 
             description=description, 
-            user_id=user_id
+            user_id=request.user.id
         )
         
         todo.save()
@@ -46,3 +54,39 @@ def create_view(request):
             return redirect('list_app:list')
         
     return render(request, 'create.html', {'user_name':request.user})
+
+
+def change_view(request):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'change':
+            todo_id = request.POST.get('todo_id')
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            is_completed = request.POST.get('is_completed') == 'on'
+
+            Todo.objects.filter(id=todo_id).update(
+                title=title, 
+                description=description, 
+                is_completed=is_completed
+            )
+
+            return redirect('list_app:list')
+
+
+    data = request.session.get('temp_data')
+
+    todo = Todo.objects.filter(id=data['todo_id']).first()
+    
+    is_completed = ''
+    if todo.is_completed:
+        is_completed = 'checked'
+    
+    return render(request, 'change.html', {
+                'todo_id':todo.id,
+                'title':todo.title,
+                'description':todo.description,
+                'is_completed':is_completed,
+                'user_name':request.user
+            })      

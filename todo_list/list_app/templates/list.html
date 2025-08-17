@@ -6,22 +6,24 @@ List
 {% block header %}
     <a href="{% url 'list_app:create' %}">Create task</a>
     <a href="{% url 'authorization_app:logout' %}">Exit</a><br>
-    <h1>{{user_name}}'s tasks</h1>
+    <h1>{{user_name}}'s tasks:</h1>
 {% endblock header %}
 
 {% block main %}
         {% for todo in todos %}
             <form method='POST'>
                 {% csrf_token %}
-                <p><b>{{todo.title}}</b></p>
+
                 <input type='hidden' name='todo_id' value='{{todo.id}}'>
-                <button type='submit' name='action' value='delete-action'>Delete task</button>
-                <button type='submit' name='action' value='change-action'>Change task</button>
+
+                <h2><b>{{todo.title}}</b></h2>
                 <ul>
                     <li>{{todo.description}}</li>
                     <li>{{todo.is_completed}}</li>
                     <li>{{todo.created_at}}</li>
                 </ul>
+                <button type='submit' name='action' value='delete-action'>Delete task</button>
+                <button type='submit' name='action' value='change-action'>Change task</button>
             </form>
             {% empty %}
             <h1>You don't have any tasks!</h1>
